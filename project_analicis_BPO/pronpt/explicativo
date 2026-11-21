@@ -1,0 +1,155 @@
+DOCUMENTACIÓN DEL PROYECTO
+ANÁLISIS DEL COMPORTAMIENTO DE AGENTES EN UN BPO PARA APOYAR LA TOMA DE DECISIONES
+
+1. OBJETIVO DEL PROYECTO
+
+El proyecto consiste en desarrollar un sistema que permita analizar el comportamiento de los agentes de un BPO mediante la información almacenada en un archivo Excel. El propósito es identificar agentes con bajo rendimiento y generar decisiones automáticas que sirvan como apoyo para la toma de decisiones.
+
+2. TECNOLOGÍAS UTILIZADAS
+
+- Python: se encarga de procesar, validar y analizar los datos.
+- Flask: permite conectar Python con la página web.
+- HTML: organiza y presenta los resultados.
+- CSS: permite diseñar la apariencia de la página.
+- Openpyxl: permite leer la información del archivo Excel.
+- Tkinter: permite abrir el explorador de archivos de Windows.
+- Webbrowser: permite abrir automáticamente el navegador.
+- Threading.Timer: permite esperar un momento antes de abrir la página web.
+
+3. ESTRUCTURA DEL PROYECTO
+
+El proyecto está organizado de la siguiente manera:
+
+project_analicis_BPO/
+    prompt/
+    templates/
+        index.html
+    app.py
+
+El archivo app.py se encuentra en la carpeta principal y contiene la lógica del programa. El archivo index.html se encuentra dentro de la carpeta templates y contiene la interfaz visual donde se presentan los resultados.
+
+4. FUNCIONAMIENTO DEL ARCHIVO APP.PY
+
+El archivo app.py es el encargado de ejecutar el proceso completo.
+
+4.1. Importación de librerías
+
+Se importan las herramientas necesarias para trabajar con Excel, abrir el explorador de archivos, conectar Python con HTML y abrir el navegador.
+
+4.2. Creación de la aplicación Flask
+
+Se crea una aplicación utilizando Flask, que permite mostrar la página HTML en el navegador.
+
+4.3. Selección del archivo Excel
+
+Se utiliza Tkinter para abrir el explorador de archivos de Windows. El usuario puede buscar y seleccionar el archivo Excel que contiene la información de los agentes.
+
+4.4. Lectura del Excel
+
+Se utiliza Openpyxl para abrir el archivo seleccionado y leer la información de la hoja activa. Los encabezados se encuentran en la fila 4 y los datos comienzan en la fila 5.
+
+4.5. Validación de los datos
+
+Python comprueba que existan las columnas necesarias y que los datos estén completos y tengan el formato correcto. También verifica que los porcentajes estén entre 0 y 100, que las llamadas y ausencias no sean negativas y que el tiempo promedio sea mayor que cero.
+
+Si encuentra errores, los guarda para mostrarlos posteriormente en la página web.
+
+4.6. Análisis de los agentes
+
+Cuando los datos son correctos, Python evalúa las métricas de cada agente y aplica las reglas de clasificación establecidas.
+
+Un agente se clasifica como crítico si cumple al menos una de estas condiciones:
+
+- Satisfacción menor a 70%.
+- Cumplimiento menor a 80%.
+- Cuatro o más ausencias.
+- Tiempo promedio superior a 7 minutos.
+
+Si no cumple ninguna condición crítica, se clasifica como bueno.
+
+4.7. Generación de decisiones
+
+Después de clasificar a los agentes, Python asigna una decisión:
+
+- Crítico: Requiere capacitación.
+- Bueno: Rendimiento adecuado.
+
+Estas decisiones permiten identificar qué agentes necesitan atención y cuáles presentan un rendimiento adecuado.
+
+4.8. Cálculo de indicadores
+
+Python calcula el total de agentes analizados, la cantidad de agentes críticos y la cantidad de agentes con buen rendimiento.
+
+4.9. Conexión con HTML
+
+Mediante Flask y la función render_template(), Python envía la información procesada al archivo index.html para que pueda presentarse visualmente.
+
+4.10. Apertura automática del navegador
+
+Finalmente, se utiliza webbrowser para abrir automáticamente la dirección local de la aplicación. Flask mantiene disponible la página para que el usuario pueda consultar los resultados.
+
+5. FUNCIONAMIENTO DEL ARCHIVO INDEX.HTML
+
+El archivo index.html representa la parte visual del sistema.
+
+Su función es presentar la información que Python ha procesado.
+
+La página contiene:
+
+- Encabezado con el nombre del proyecto.
+- Nombre del archivo Excel procesado.
+- Mensaje de confirmación cuando el análisis termina correctamente.
+- Mensajes de error cuando se encuentran problemas.
+- Tarjetas con el total de agentes.
+- Tarjetas con la cantidad de agentes críticos y agentes con buen rendimiento.
+- Tabla con las métricas de cada agente.
+- Estado y decisión asignados a cada agente.
+
+También utiliza CSS para organizar los elementos, definir colores, tamaños, espacios y adaptar la página a diferentes tamaños de pantalla.
+
+Para mostrar los datos utiliza Jinja, el sistema de plantillas integrado con Flask. Este permite recibir las variables enviadas desde Python y mostrarlas dentro del HTML.
+
+6. FLUJO COMPLETO DEL SISTEMA
+
+El funcionamiento general se desarrolla en el siguiente orden:
+
+1. El usuario abre Visual Studio Code.
+2. Ejecuta el comando py app.py en la terminal.
+3. Python abre automáticamente el explorador de archivos de Windows.
+4. El usuario selecciona el archivo Excel.
+5. Python lee la información utilizando Openpyxl.
+6. El sistema valida las columnas y los datos.
+7. Si existen errores, los prepara para mostrarlos en la página.
+8. Si los datos son correctos, Python analiza las métricas de los agentes.
+9. Se generan las clasificaciones y decisiones automáticas.
+10. Python calcula los indicadores generales.
+11. Flask conecta los resultados con el archivo HTML.
+12. Se abre automáticamente el navegador con la página de resultados.
+
+7. INSTALACIÓN Y EJECUCIÓN
+
+Para ejecutar el proyecto se necesitan las librerías Flask y Openpyxl.
+
+Se instalan desde la terminal con el comando:
+
+py -m pip install flask openpyxl
+
+Después se ejecuta el proyecto desde la carpeta principal:
+
+py app.py
+
+Al ejecutarlo, se abre el explorador de archivos para seleccionar el Excel. Una vez procesado, se abre automáticamente la página web con los resultados.
+
+8. PROPÓSITO Y BENEFICIO DEL SISTEMA
+
+El sistema busca facilitar el análisis de información de los agentes de un BPO, reducir el trabajo manual de revisión de métricas y organizar los resultados para apoyar la toma de decisiones.
+
+Mediante la clasificación automática, es posible identificar agentes que requieren capacitación y agentes que mantienen un rendimiento adecuado.
+
+La presentación de los resultados en una página web facilita su consulta y comprensión sin necesidad de generar archivos Excel adicionales.
+
+9. CONCLUSIÓN
+
+El proyecto integra Python y tecnologías web para desarrollar una herramienta sencilla de análisis de datos. Su funcionamiento permite seleccionar un archivo Excel, validar la información, analizar las métricas de los agentes y presentar los resultados automáticamente en una página HTML.
+
+De esta manera, se busca convertir los datos operativos de un BPO en información organizada que facilite la identificación de oportunidades de mejora y apoye la toma de decisiones.

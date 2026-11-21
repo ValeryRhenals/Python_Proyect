@@ -1,0 +1,215 @@
+# Análisis del comportamiento de agentes en un BPO
+
+## Descripción
+
+Proyecto universitario desarrollado en Python para analizar métricas de
+agentes de un BPO y generar información que apoye la toma de decisiones.
+
+El programa permite seleccionar un archivo Excel desde el explorador de
+archivos de Windows, validar sus datos, clasificar a los agentes y
+mostrar los resultados en una página web local.
+
+## Objetivo
+
+Facilitar la revisión de las métricas de los agentes, identificar
+posibles casos críticos y presentar los resultados de forma organizada
+para apoyar la toma de decisiones.
+
+## Tecnologías utilizadas
+
+-   **Python:** procesamiento, validación y análisis de los datos.
+-   **Flask:** conexión entre Python y la página web.
+-   **Openpyxl:** lectura de archivos Excel.
+-   **Tkinter:** apertura del explorador de archivos de Windows.
+-   **HTML:** estructura de la página de resultados.
+-   **CSS:** diseño y presentación visual.
+-   **Webbrowser:** apertura automática del navegador.
+
+## Estructura del proyecto
+
+``` text
+project_analicis_BPO/
+├── prompt/
+├── templates/
+│   └── index.html
+└── app.py
+```
+
+-   `app.py`: contiene la lógica del sistema. Selecciona el archivo, lee
+    y valida los datos, analiza a los agentes y envía los resultados a
+    la página web.
+-   `templates/index.html`: presenta los resultados, indicadores,
+    mensajes y tabla de agentes.
+-   `prompt/`: carpeta reservada para guardar los prompts relacionados
+    con el proyecto.
+
+## Requisitos del archivo Excel
+
+El archivo debe estar en formato `.xlsx`.
+
+La hoja activa debe tener los encabezados en la **fila 4** y los
+registros de agentes a partir de la **fila 5**.
+
+Las columnas requeridas son:
+
+  Columna                 Descripción
+  ----------------------- -----------------------------------------
+  ID del agente           Identificador del agente
+  Llamadas                Cantidad de llamadas
+  Satisfacción (%)        Porcentaje de satisfacción
+  Cumplimiento (%)        Porcentaje de cumplimiento
+  Ausencias               Cantidad de ausencias
+  Tiempo promedio (min)   Tiempo promedio por llamada, en minutos
+
+## Validaciones
+
+Antes de realizar el análisis, el programa comprueba que:
+
+-   Estén presentes todas las columnas requeridas.
+-   Cada agente tenga un ID.
+-   Las métricas estén completas y sean numéricas.
+-   Satisfacción y cumplimiento estén entre 0 y 100.
+-   Llamadas y ausencias no sean valores negativos ni decimales.
+-   El tiempo promedio sea mayor que cero.
+-   El archivo contenga al menos un agente para analizar.
+
+Si se encuentran errores, el sistema los prepara para mostrarlos en la
+página web y no realiza la clasificación.
+
+## Reglas de clasificación actuales
+
+Un agente se clasifica como **Crítico** cuando cumple al menos una de
+estas condiciones:
+
+-   Satisfacción menor a 70 %.
+-   Cumplimiento menor a 80 %.
+-   Cuatro o más ausencias.
+-   Tiempo promedio superior a 7 minutos.
+
+Si no cumple ninguna de las condiciones anteriores, se clasifica como
+**Bueno**.
+
+### Decisiones asignadas
+
+  Estado    Decisión
+  --------- -----------------------
+  Crítico   Requiere capacitación
+  Bueno     Rendimiento adecuado
+
+Estas son las reglas iniciales del proyecto y pueden ajustarse de
+acuerdo con los criterios definidos para el análisis.
+
+## Instalación
+
+Se requiere tener Python instalado.
+
+Abre una terminal en la carpeta `project_analicis_BPO` y ejecuta:
+
+``` bash
+py -m pip install flask openpyxl
+```
+
+Tkinter y `webbrowser` forman parte de la biblioteca estándar de Python
+en una instalación habitual de Windows, por lo que no se instalan con
+ese comando.
+
+## Ejecución
+
+1.  Abre la carpeta del proyecto en Visual Studio Code.
+
+2.  Abre una terminal integrada.
+
+3.  Verifica que la terminal esté ubicada en la carpeta
+    `project_analicis_BPO`, donde se encuentra `app.py`.
+
+4.  Ejecuta:
+
+    ``` bash
+    py app.py
+    ```
+
+5.  Se abrirá el explorador de archivos de Windows.
+
+6.  Selecciona el archivo Excel `.xlsx` que contiene los datos de los
+    agentes.
+
+7.  Python leerá, validará y analizará la información.
+
+8.  Al terminar, se iniciará Flask y se abrirá el navegador en:
+
+    `http://127.0.0.1:5000`
+
+La página mostrará el resumen y el detalle de los agentes o, si se
+detectan problemas, los mensajes de error correspondientes.
+
+Para detener el servidor, vuelve a la terminal de Visual Studio Code y
+presiona `Ctrl + C`.
+
+## Flujo de funcionamiento
+
+``` text
+Ejecutar py app.py
+        |
+        v
+Abrir explorador de Windows (Tkinter)
+        |
+        v
+Seleccionar archivo Excel
+        |
+        v
+Leer el archivo (Openpyxl)
+        |
+        v
+Validar columnas y datos
+        |
+        v
+¿Hay errores?
+   |             |
+  Sí             No
+   |             |
+   v             v
+Preparar       Analizar y clasificar
+mensajes       los agentes
+   |             |
+   v             v
+   +-------> Preparar datos para HTML
+                    |
+                    v
+              Iniciar Flask
+                    |
+                    v
+           Abrir navegador automáticamente
+                    |
+                    v
+             Mostrar resultados
+```
+
+## Alcance de esta versión
+
+Esta versión permite seleccionar y procesar un archivo Excel por
+ejecución y visualizar los resultados en una página HTML local.
+
+No genera un segundo archivo Excel. La página se sirve localmente
+mediante Flask y está pensada para ejecutarse en el equipo donde se
+encuentra el proyecto.
+
+La clasificación utiliza las reglas descritas en este documento. No se
+ha incorporado todavía un modelo de inteligencia artificial ni el envío
+automático de correos.
+
+## Posibles mejoras futuras
+
+-   Mejorar el diseño del panel de resultados.
+-   Incorporar gráficos para comparar las métricas.
+-   Permitir consultar más detalles de cada agente.
+-   Ajustar las reglas de clasificación según los criterios del
+    proyecto.
+-   Incorporar nuevas funciones de apoyo a la toma de decisiones.
+
+## Autoría y contexto académico
+
+Proyecto universitario: **Análisis del comportamiento de agentes en un
+BPO para apoyar la toma de decisiones**.
+
+Este README describe la estructura, los requisitos y el funcionamiento
+de la versión actual del proyecto.

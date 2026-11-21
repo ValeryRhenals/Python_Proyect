@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Análisis de Agentes BPO</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6f9;
+            color: #263445;
+        }
+
+        header {
+            background: #173b35;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+        }
+
+        header p {
+            margin: 0;
+            color: #d5e5df;
+        }
+
+        .contenedor {
+            max-width: 1150px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000010;
+            margin-bottom: 25px;
+        }
+
+        .informacion {
+            color: #687781;
+            font-size: 14px;
+        }
+
+        .tarjetas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .tarjeta {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #00000010;
+            border-left: 5px solid #18794e;
+        }
+
+        .tarjeta.critica {
+            border-left-color: #c62828;
+        }
+
+        .tarjeta.buena {
+            border-left-color: #18794e;
+        }
+
+        .tarjeta p {
+            color: #687781;
+            margin: 0 0 12px;
+        }
+
+        .tarjeta h2 {
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .archivo {
+            background: #eaf2ee;
+            color: #245c43;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            min-width: 850px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e9ed;
+        }
+
+        th {
+            background: #edf3f0;
+            color: #344b42;
+        }
+
+        tr:hover {
+            background: #f8faf9;
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .critico {
+            background: #fde8e8;
+            color: #b42318;
+        }
+
+        .bueno {
+            background: #e2f5e9;
+            color: #17643b;
+        }
+
+        .error {
+            background: #fde8e8;
+            color: #a32222;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .error h2 {
+            margin-top: 0;
+        }
+
+        .error li {
+            margin-bottom: 8px;
+        }
+
+        .exito {
+            background: #e2f5e9;
+            color: #17643b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #78858f;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+
+            .tarjetas {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+
+    <header>
+
+        <h1>ANÁLISIS DE AGENTES BPO</h1>
+
+        <p>
+            Sistema de análisis del comportamiento de agentes
+        </p>
+
+    </header>
+
+
+    <main class="contenedor">
+
+        <!-- ARCHIVO PROCESADO -->
+
+        <section class="panel">
+
+            <h2>Información del proceso</h2>
+
+            <p class="informacion">
+                Resultados obtenidos mediante el análisis
+                automático de un archivo Excel.
+            </p>
+
+            <div class="archivo">
+
+                <strong>Archivo procesado:</strong>
+
+                {{ nombre_archivo }}
+
+            </div>
+
+        </section>
+
+
+        <!-- MOSTRAR ERRORES -->
+
+        {% if errores %}
+
+            <section class="error">
+
+                <h2>No se pudo completar el análisis</h2>
+
+                <p>
+                    Se encontraron los siguientes problemas:
+                </p>
+
+                <ul>
+
+                    {% for error in errores %}
+
+                        <li>{{ error }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+                <p>
+                    Corrige los problemas del archivo
+                    e intenta ejecutar nuevamente el programa.
+                </p>
+
+            </section>
+
+        {% else %}
+
+
+            <!-- MENSAJE DE EXITO -->
+
+            <div class="exito">
+
+                <strong>
+                    Análisis completado correctamente.
+                </strong>
+
+                Todos los datos fueron validados.
+
+            </div>
+
+
+            <!-- TARJETAS DE RESULTADOS -->
+
+            <h2>Resumen general</h2>
+
+            <section class="tarjetas">
+
+                <div class="tarjeta">
+
+                    <p>Total de agentes</p>
+
+                    <h2>{{ total_agentes }}</h2>
+
+                </div>
+
+
+                <div class="tarjeta critica">
+
+                    <p>Agentes críticos</p>
+
+                    <h2 style="color: #c62828;">
+
+                        {{ total_criticos }}
+
+                    </h2>
+
+                </div>
+
+
+                <div class="tarjeta buena">
+
+                    <p>Agentes con buen rendimiento</p>
+
+                    <h2 style="color: #18794e;">
+
+                        {{ total_buenos }}
+
+                    </h2>
+
+                </div>
+
+            </section>
+
+
+            <!-- TABLA DE AGENTES -->
+
+            <section class="panel">
+
+                <h2>Resultados por agente</h2>
+
+                <p class="informacion">
+                    Detalle de las métricas y decisiones
+                    generadas para cada agente.
+                </p>
+
+                <div class="tabla-contenedor">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Llamadas</th>
+
+                                <th>Satisfacción</th>
+
+                                <th>Cumplimiento</th>
+
+                                <th>Ausencias</th>
+
+                                <th>Tiempo promedio</th>
+
+                                <th>Estado</th>
+
+                                <th>Decisión</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for agente in agentes %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ agente["ID del agente"] }}
+                                    </td>
+
+                                    <td>
+                                        {{ agente["Llamadas"] }}
+                                    </td>
+
+                                    <td>
+                                        {{ agente["Satisfacción (%)"] }}%
+                                    </td>
+
+                                    <td>
+                                        {{ agente["Cumplimiento (%)"] }}%
+                                    </td>
+
+                                    <td>
+                                        {{ agente["Ausencias"] }}
+                                    </td>
+
+                                    <td>
+                                        {{ agente["Tiempo promedio (min)"] }} min
+                                    </td>
+
+                                    <td>
+
+                                        <span class="estado {{ agente['color'] }}">
+
+                                            {{ agente["estado"] }}
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+                                        {{ agente["decision"] }}
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        {% endif %}
+
+    </main>
+
+
+    <footer>
+
+        Proyecto universitario
+        <br>
+        Análisis del comportamiento de agentes BPO
+
+    </footer>
+
+</body>
+
+</html>
